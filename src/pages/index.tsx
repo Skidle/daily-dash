@@ -1,6 +1,8 @@
 import Head from 'next/head'
 import styles from '@/styles/Home.module.css'
 import { NextPage } from 'next';
+import { ProgressBar } from '@/components/ProgressBar';
+import { TimeUnit } from '@/constants';
 
 const title = 'Daily Dash';
 const description = 'Make today count';
@@ -12,43 +14,22 @@ const dayTitle = 'Today';
 const weekTitle = 'This week';
 const monthTitle = 'This month';
 
-const ProgressBar = (props) => {
-  const { bgcolor, completed } = props;
+const ProgressWithTitle = ({ unit }: { unit: TimeUnit }) => {
+  let title = dayTitle;
 
-  const containerStyles = {
-    height: 20,
-    width: '100%',
-    backgroundColor: "#F9F9F9",
-  }
-
-  const fillerStyles = {
-    height: '100%',
-    width: `${completed}%`,
-    backgroundColor: '#858585',
-    textAlign: 'center'
-  }
-
-  const labelStyles = {
-    padding: 5,
-    color: 'white',
-    fontWeight: 'bold'
+  if (unit === TimeUnit.Week) {
+    title = weekTitle;
+  } else if (unit === TimeUnit.Month) {
+    title = monthTitle;
   }
 
   return (
-    <div style={containerStyles}>
-      <div style={fillerStyles}>
-        <span style={labelStyles}>{`${completed}%`}</span>
-      </div>
+    <div className={styles.progressWithTitleContainer}>
+      <div className={styles.progressTitle}>{title}</div>
+      <ProgressBar unit={unit} />
     </div>
-  );
+  )
 };
-
-const ProgressWithTitle = ({ title, percent }: { title: string, percent: number }) => (
-  <div>
-    <div className={styles.progressTitle}>{title}</div>
-    <ProgressBar completed={percent} />
-  </div>
-);
 
 const Home: NextPage = () => (
   <>
@@ -66,9 +47,9 @@ const Home: NextPage = () => (
     </header>
     <main className={styles.main}>
       <section>
-        <ProgressWithTitle title={dayTitle} percent={30} />
-        <ProgressWithTitle title={weekTitle} percent={70} />
-        <ProgressWithTitle title={monthTitle} percent={25} />
+        <ProgressWithTitle unit={TimeUnit.Day} />
+        <ProgressWithTitle unit={TimeUnit.Week} />
+        <ProgressWithTitle unit={TimeUnit.Month} />
       </section>
       <section>
         goals
