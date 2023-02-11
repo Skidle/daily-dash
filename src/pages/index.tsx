@@ -1,48 +1,22 @@
 import Head from 'next/head'
 import styles from '@/styles/Home.module.css'
 import { NextPage } from 'next';
-import { ProgressBar } from '@/components/ProgressBar';
-import { TimeUnit } from '@/constants';
-
-const title = 'Daily Dash';
-const description = 'Make today count';
-
-const tabTitle = 'Make today ';
-const tabTitleBold = 'count';
-
-const dayTitle = 'Today';
-const weekTitle = 'This week';
-const monthTitle = 'This month';
-
-const ProgressWithTitle = ({ unit }: { unit: TimeUnit }) => {
-  let title = dayTitle;
-
-  if (unit === TimeUnit.Week) {
-    title = weekTitle;
-  } else if (unit === TimeUnit.Month) {
-    title = monthTitle;
-  }
-
-  return (
-    <div className={styles.progressWithTitleContainer}>
-      <div className={styles.progressTitle}>{title}</div>
-      <ProgressBar unit={unit} />
-    </div>
-  )
-};
+import { ProgressWithTitle } from '@/components/ProgressBar';
+import { TodoForm } from '@/components/TodoForm';
+import { TimeUnit, Text } from '@/constants';
 
 const Home: NextPage = () => (
   <>
     <Head>
-      <title>{title}</title>
-      <meta name="description" content={description} />
+      <title>{Text.DailyDash}</title>
+      <meta name="description" content={`${Text.MakeToday} ${Text.Count}`} />
       <meta name="viewport" content="width=device-width, initial-scale=1" />
       <link rel="icon" href="/favicon.ico" />
     </Head>
     <header>
       <h1 className={styles.tabTitle}>
-        {tabTitle}
-        <span className={styles.tabTitleBold}>{tabTitleBold}</span>
+        {Text.MakeToday}
+        <span className={styles.tabTitleBold}> {Text.Count}</span>
       </h1>
     </header>
     <main className={styles.main}>
@@ -52,7 +26,8 @@ const Home: NextPage = () => (
         <ProgressWithTitle unit={TimeUnit.Month} />
       </section>
       <section>
-        goals
+        <h2 className={styles.goalsTitle}>{Text.TodaysGoals}</h2>
+        <TodoForm />
       </section>
     </main>
   </>

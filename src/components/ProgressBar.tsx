@@ -1,16 +1,35 @@
 import styles from '@/styles/Home.module.css'
-import { TimeUnit } from '@/constants';
+import { TimeUnit, Text } from '@/constants';
 import { percentageOfTimeUnit } from '@/utils';
 
-export const ProgressBar = ({ unit }: { unit: TimeUnit }) => {
+const ProgressBar = ({ unit }: { unit: TimeUnit }) => {
     const progress = percentageOfTimeUnit(unit);
-
-    const textColor = progress > 60 ? "white" : "#858585";
 
     return (
     <div className={styles.progressBarContainer}>
         <span className={styles.progressBarFilled} style={{ width: `${progress}%` }} />
-        <span className={styles.percentage} style={{ color: textColor }}>{`${progress}%`}</span>
+        <span className={styles.percentage}>{`${progress}%`}</span>
     </div>
     );
+};
+
+const dayTitle = Text.Today;
+const weekTitle = Text.ThisWeek;
+const monthTitle = Text.ThisMonth;
+
+export const ProgressWithTitle = ({ unit }: { unit: TimeUnit }) => {
+  let title = dayTitle;
+
+  if (unit === TimeUnit.Week) {
+    title = weekTitle;
+  } else if (unit === TimeUnit.Month) {
+    title = monthTitle;
+  }
+
+  return (
+    <div className={styles.progressWithTitleContainer}>
+      <h2 className={styles.progressTitle}>{title}</h2>
+      <ProgressBar unit={unit} />
+    </div>
+  )
 };
