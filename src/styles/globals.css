@@ -31,3 +31,31 @@ h2 {
   font-weight: normal;
   margin: 0;
 }
+
+ul {
+  display: unset;
+  list-style-type: unset;
+  margin-block-start: unset;
+  margin-block-end: unset;
+  margin-inline-start: unset;
+  margin-inline-end: unset;
+  padding-inline-start: unset;
+}
+
+li {
+  display: unset;
+
+}
+
+input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  outline: none;
+  transition: all 0.2s ease-in-out;
+  min-width: 200px;
+}
+
+input:focus {
+  border: 1px solid #6e6e6e;
+}

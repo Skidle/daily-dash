@@ -5,6 +5,7 @@ export enum TimeUnit {
 }
 
 export enum Text {
+    Add = 'Add',
     AddTask = 'Add a task',
     Complete = 'Complete',
     Count = 'count',
