@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FieldValues, useForm } from 'react-hook-form';
+import { Input, Button, Flex, Box, IconButton, Editable, EditablePreview, EditableInput } from '@chakra-ui/react';
+import { CheckIcon, DeleteIcon, EditIcon } from '@chakra-ui/icons';
 import styles from '@/styles/Home.module.css'
 import { Text } from '@/constants';
 import { useLocalStorage } from '@/hooks';
@@ -15,6 +17,7 @@ export const TodoForm = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [editing, setEditing] = useState<null | number>(null);
   const [taskInput, setTaskInput] = useState('');
+  const [taskIndex, setTaskIndex] = useState(null);
   const { register, handleSubmit, reset } = useForm();
 
   useEffect(() => {
@@ -29,10 +32,11 @@ export const TodoForm = () => {
 
 
   const onSubmit = (data: FieldValues) => {
-    if (editing !== null) {
+    console.log({ data });
+    if (taskIndex !== null) {
       setTodos(
         todos.map((todo, i) => {
-          if (i === editing) {
+          if (i === taskIndex) {
             return { ...todo, task: taskInput };
           }
           return todo;
@@ -40,6 +44,7 @@ export const TodoForm = () => {
       );
       setEditing(null);
       setTaskInput('');
+      setTaskIndex(null);
     } else {
       setTodos([...todos, { task: data.task, completed: false, id: crypto.randomUUID() }]);
       reset();
@@ -79,14 +84,24 @@ export const TodoForm = () => {
     setTaskInput('');
   };
 
+  const handleEditableSubmit = (value, index) => {
+    setTaskIndex(index);
+    setTaskInput(value);
+  }
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)}> 
-      <input type="text" placeholder={Text.AddTask} {...register('task')} />
-      <button type="submit" className={styles.successButton}>{Text.Add}</button>
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <Flex minWidth='max-content' alignItems='center' gap='2'>
+        <Box p='2'>
+          <Input type="text" placeholder={Text.AddTask} {...register('task')} />
+        </Box>
+        {/* <Spacer /> */}
+        <Button colorScheme='blue' type="submit">{Text.Add}</Button>
+      </Flex>
       <ul>
         {todos.map(({ completed, task, id }, index) => (
           <li key={id}>
-            {editing === index ? (
+            {/* {editing === index ? (
               <input
                 type="text"
                 value={taskInput}
@@ -107,26 +122,28 @@ export const TodoForm = () => {
               }}>
                 {task}
               </span>
-            )}
+            )} */}
+            <Editable
+              defaultValue={task}
+              onSubmit={(value) => handleEditableSubmit(value, index)}
+              placeholder="Click to edit"
+            >
+              <EditablePreview />
+              <EditableInput
+                {...register(`task-${index}`)}
+              />
+            </Editable>
             {editing === null && (
               <>
-                <button type="button" className={styles.completeButton} onClick={() => toggleComplete(index)}>
-                  {completed ? Text.Undo : Text.Complete}
-                </button>
-                <button type="button" className={styles.removeButton} onClick={() => removeTodo(index)}>
-                  {Text.Remove}
-                </button>
+                <IconButton aria-label={completed ? Text.Undo : Text.Complete} variant={completed ? 'solid' : 'ghost'} colorScheme='blue' icon={<CheckIcon />} onClick={() => toggleComplete(index)} />
+                <IconButton aria-label={Text.Remove} colorScheme='red' variant='ghost' icon={<DeleteIcon />} onClick={() => removeTodo(index)} />
               </>
             )}
             {editing !== index && (
-              <button type="button" className={styles.editButton} onClick={() => editTodo(index)}>
-                {Text.Edit}
-              </button>
+              <IconButton aria-label={Text.Edit} colorScheme='yellow' variant='ghost' icon={<EditIcon />} onClick={() => editTodo(index)} />
             )}
             {editing === index && (
-              <button type="button" className={styles.successButton} onClick={() => saveEdit(index)}>
-                {Text.Save}
-              </button>
+              <Button colorScheme='blue' type="button" onClick={() => saveEdit(index)}>{Text.Save}</Button>
             )}
           </li>
         ))}
