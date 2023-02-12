@@ -4,19 +4,44 @@ export enum TimeUnit {
     Month,
 }
 
-export enum Text {
+export enum TextKey {
     Add = 'Add',
+    AddProject = 'Add project',
     AddTask = 'Add a task',
+    Color = 'Color',
     Complete = 'Complete',
     Count = 'count',
     DailyDash = 'Daily Dash',
     Edit = 'Edit',
+    Label = 'Label',
     MakeToday = 'Make today',
+    Name = 'Name',
+    NewTask = 'New task',
+    NoBlank = 'Cannot be blank',
+    NoTasks = 'No tasks',
+    Project = 'Project',
+    Projects = 'Projects',
     Remove = 'Remove',
     Save = 'Save',
+    Tasks = 'Tasks',
     ThisMonth = 'This month',
     ThisWeek = 'This week',
     Today = 'Today',
     TodaysGoals = `Today's goals`,
     Undo = 'Undo',
+}
+
+export enum ProjectColor {
+    Black = 'black',
+    Blue = 'blue',
+    Cyan = 'cyan',
+    Gray = 'gray',
+    Green = 'green',
+    Orange = 'orange',
+    Pink = 'pink',
+    Purple = 'purple',
+    Red = 'red',
+    Teal = 'teal',
+    White = 'white',
+    Yellow = 'yellow',
 }
