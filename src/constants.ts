@@ -9,13 +9,15 @@ export enum TextKey {
     AddProject = 'Add project',
     AddTask = 'Add a task',
     Color = 'Color',
+    Goals = 'Goals',
     Complete = 'Complete',
     Count = 'count',
     DailyDash = 'Daily Dash',
     Edit = 'Edit',
-    Label = 'Label',
-    MakeToday = 'Make today',
     Name = 'Name',
+    MakeToday = 'Make today',
+    Period = 'Period',
+    Measure = 'Measure',
     NewTask = 'New task',
     NoBlank = 'Cannot be blank',
     NoTasks = 'No tasks',
@@ -44,4 +46,11 @@ export enum ProjectColor {
     Teal = 'teal',
     White = 'white',
     Yellow = 'yellow',
+}
+
+export enum GoalPeriod {
+    Year = 'Year',
+    Quarter = 'Quarter',
+    Month = 'Month',
+    Week = 'Week',
 }

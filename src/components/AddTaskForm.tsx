@@ -4,18 +4,18 @@ import { TextKey } from '@/constants';
 import { Task, Project } from '@/types';
 
 interface AddTaskFormProps {
-  handleAdd: ({ label, projectId }: Pick<Task, 'label' | 'projectId'>) => void;
+  handleAdd: ({ name, projectId }: Pick<Task, 'name' | 'projectId'>) => void;
   projects: Project[];
 }
 
 export const AddTaskForm = ({ handleAdd, projects }: AddTaskFormProps) => {
   const { register, handleSubmit, reset, formState, clearErrors } = useForm({
     shouldUnregister: true,
-    defaultValues: { label: '', projectId: '' },
+    defaultValues: { name: '', projectId: '' },
   });
 
-  const onSubmit = ({ label, projectId }: FieldValues) => {
-    handleAdd({ label, projectId });
+  const onSubmit = ({ name, projectId }: FieldValues) => {
+    handleAdd({ name, projectId });
     reset();
     clearErrors();
   };
@@ -27,10 +27,10 @@ export const AddTaskForm = ({ handleAdd, projects }: AddTaskFormProps) => {
         <CardBody>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <FormControl mr="3" isInvalid={errors.length > 0} isRequired>
-                    <FormLabel>{TextKey.Label}</FormLabel>
+                    <FormLabel>{TextKey.Name}</FormLabel>
                     <Input
-                        id="label"
-                        {...register('label', { required: true })}
+                        id="name"
+                        {...register('name', { required: true })}
                     />
                     <FormErrorMessage>{errors.length && errors[0].message}</FormErrorMessage>
                 </FormControl>

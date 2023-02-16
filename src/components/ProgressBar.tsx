@@ -1,5 +1,4 @@
 import { Box, Text } from '@chakra-ui/react';
-import styles from '@/styles/Home.module.css'
 import { TimeUnit, TextKey } from '@/constants';
 import { percentageOfTimeUnit } from '@/utils';
 

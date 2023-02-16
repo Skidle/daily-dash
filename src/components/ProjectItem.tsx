@@ -9,7 +9,7 @@ interface ProjectItemProps {
     color: Project['color'];
     handleComplete: (taskId: Task['id']) => void;
     handleDelete: (taskId: Task['id']) => void;
-    handleEdit: (taskId: Task['id']) => (label: string) => void;
+    handleEdit: (taskId: Task['id']) => (name: string) => void;
 }
 
 export const ProjectItem = ({ projectName, tasks, color, handleComplete, handleEdit, handleDelete }: ProjectItemProps) => {
@@ -28,13 +28,13 @@ export const ProjectItem = ({ projectName, tasks, color, handleComplete, handleE
             </h2>
             <AccordionPanel pb={4}>
             {tasks.length > 0
-                ? tasks.map(({ label, completed, id }) => (
+                ? tasks.map(({ name, completed, id }) => (
                     <Box key={id}>
                         <Flex justify="space-between" align="center">
                             <Box>
                                 <Flex>
                                     <Checkbox defaultChecked={completed} mr="3" colorScheme="gray" onChange={() => handleComplete(id)} />
-                                    <Editable defaultValue={label} onSubmit={handleEdit(id)} selectAllOnFocus={false}>
+                                    <Editable defaultValue={name} onSubmit={handleEdit(id)} selectAllOnFocus={false}>
                                         <EditablePreview px="3" py="1" as={completed ? 'del' : undefined} />
                                         <EditableInput px="3" py="1" />
                                     </Editable>

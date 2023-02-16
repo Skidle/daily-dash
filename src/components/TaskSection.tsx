@@ -1,55 +1,41 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Text } from '@chakra-ui/react';
 import { TaskList } from './TaskList';
 import { AddTaskForm } from './AddTaskForm';
+import { addTask, completeTask, deleteTask, editTask, loadTasks } from '../features/tasksSlice';
 import { TextKey } from '@/constants';
-import { useLocalStorage } from '@/hooks';
 import { Task, Project } from '@/types';
+import { RootState } from '@/store';
 
 export const TaskSection = ({ projects }: { projects: Project[] }) => {
-    const [localTasks, setLocalTasks] = useLocalStorage<Task[]>('tasks', []);
-    const [tasks, setTasks] = useState<Task[]>([]);
+    const dispatch = useDispatch();
+    const tasks = useSelector((state: RootState) => state.tasks.data);
 
     // load tasks
     useEffect(() => {
-        if (localTasks.length > 0) {
-            setTasks(localTasks);
-        }
-      }, [localTasks]);
-    
-      useEffect(() => {
-        setLocalTasks(tasks);
-      }, [tasks, setLocalTasks])
+      const localTasks = JSON.parse(window.localStorage.getItem('tasks') || '[]');
+      dispatch(loadTasks(localTasks));
+    }, [dispatch]);
 
     // CRUD handlers
     const handleComplete = (taskId: Task['id']) => {
-      const updatedTasks = tasks.map((task) => {
-        const completed = !task.completed;
-        return task.id === taskId ? { ...task, completed } : task;
-      });
-      setTasks(updatedTasks);
-    };
-  
-    const handleDelete = (taskId: Task['id']) => {
-      setTasks(tasks.filter(({ id }) => taskId !== id));
-    };
-  
-    const handleAdd = ({ label, projectId }: Pick<Task, 'label' | 'projectId'>) => {
-      const newTask = {
-        id: crypto.randomUUID(),
-        completed: false,
-        label,
-        projectId,
-      };
-      setTasks([...tasks, newTask]);
+      dispatch(completeTask(taskId));
     };
 
-    const handleEdit = (taskId: Task['id']) => (label: Task['label']) => {
-        const updatedTasks = tasks.map((task) => {
-            return task.id === taskId ? { ...task, label } : task;
-          });
-        setTasks(updatedTasks);
+    const handleDelete = (taskId: Task['id']) => {
+      dispatch(deleteTask(taskId));
     };
+
+    const handleAdd = ({ name, projectId }: Pick<Task, 'name' | 'projectId'>) => {
+      dispatch(addTask({ name, projectId, completed: false, id: crypto.randomUUID() }));
+    };
+
+    const handleEdit = (taskId: Task['id']) => (name: Task['name']) => {
+      dispatch(editTask({ id: taskId, name }));
+    };
+
+    console.log({ tasks })
 
     return (
         <section>

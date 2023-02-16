@@ -1,30 +1,27 @@
 import Head from 'next/head'
 import { NextPage } from 'next';
-import { useEffect, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useEffect } from 'react';
 import styles from '@/styles/Home.module.css'
 import { Box, Button, useDisclosure } from '@chakra-ui/react';
 import { ProgressWithTitle } from '@/components/ProgressBar';
 import { TaskSection } from '@/components/TaskSection';
 import { AppDrawer } from '@/components/AppDrawer';
+import { GoalSection } from '@/components/GoalSection';
 import { TimeUnit, TextKey } from '@/constants';
 import { Project } from '@/types';
-import { useLocalStorage } from '@/hooks';
+import { RootState } from '@/store';
+import { addProject, deleteProject, loadProjects } from '../features/projectsSlice';
 
 const Home: NextPage = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [localProjects, setLocalProjects] = useLocalStorage<Project[]>('projects', []);
-  const [projects, setProjects] = useState<Project[]>([]);
+  const projects = useSelector((state: RootState) => state.projects.data);
+  const dispatch = useDispatch();
 
-  // load projects
   useEffect(() => {
-      if (localProjects.length > 0) {
-        setProjects(localProjects);
-      }
-    }, [localProjects]);
-  
-    useEffect(() => {
-      setLocalProjects(projects);
-    }, [projects, setLocalProjects])
+    const localProjects = JSON.parse(window.localStorage.getItem('projects') || '[]');
+    dispatch(loadProjects(localProjects));
+  }, [dispatch]);
 
   // CRUD handlers
   const handleAdd = ({ color, name }: Pick<Project, 'color' | 'name'>) => {
@@ -33,11 +30,11 @@ const Home: NextPage = () => {
       name,
       color,
     };
-    setProjects([...projects, newProject]);
+    dispatch(addProject(newProject));
   };
 
   const handleDelete = (projectId: Project['id']) => {
-    setProjects(projects.filter(({ id }) => projectId !== id));
+    dispatch(deleteProject(projectId));
   };
 
   return (
@@ -59,6 +56,7 @@ const Home: NextPage = () => {
             <Button onClick={onOpen} colorScheme='blue' variant='solid'>{TextKey.Projects}</Button>
             <AppDrawer isOpen={isOpen} onClose={onClose} handleAdd={handleAdd} handleDelete={handleDelete} projects={projects} />
           </section>
+          <GoalSection projects={projects} />
         </Box>
         <TaskSection projects={projects} />
       </main>

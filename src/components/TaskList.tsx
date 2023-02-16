@@ -6,7 +6,7 @@ interface TaskListProps {
     tasks: Task[],
     handleComplete: (taskId: string) => void;
     handleDelete: (taskId: string) => void;
-    handleEdit: (id: string) => (label: string) => void;
+    handleEdit: (id: string) => (name: string) => void;
     projects: Project[];
 }
 
